@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  web:
+    build: ./diploma
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./diploma/:/usr/src/diploma/
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - memcached
+      - rabbit
+    # links: 
+    #   - rabbit
+    env_file:
+      - ./.env.dev
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=dastan
+      - POSTGRES_PASSWORD=infinitiq50
+      - POSTGRES_DB=carbase
+  memcached:
+    image: memcached
+    ports:
+      - "11211:11211"
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+      - RABBITMQ_DISK_FREE_LIMIT=1GB
+    expose:
+       - 5672
+    ports:
+      - "5672:5672"  
+      - "15672:15672"  # here, we can access rabbitmq management plugin
+    volumes:
+      - rabbit:/var/lib/rabbit
+      - ./rabbit.conf:/etc/rabbit/rabbitmq.conf
+  
+volumes:
+  postgres_data:
+  rabbit:
