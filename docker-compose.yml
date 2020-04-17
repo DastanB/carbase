@@ -12,8 +12,17 @@ services:
       - db
       - memcached
       - rabbit
-    # links: 
+    # links:
     #   - rabbit
+    env_file:
+      - ./.env.dev
+  celery:
+    build: ./diploma
+    command: celery -A diploma worker --pool=solo -l info
+    depends_on:
+      - db
+      - memcached
+      - rabbit
     env_file:
       - ./.env.dev
   db:
@@ -38,12 +47,12 @@ services:
     expose:
        - 5672
     ports:
-      - "5672:5672"  
+      - "5672:5672"
       - "15672:15672"  # here, we can access rabbitmq management plugin
     volumes:
       - rabbit:/var/lib/rabbit
       - ./rabbit.conf:/etc/rabbit/rabbitmq.conf
-  
+
 volumes:
   postgres_data:
   rabbit:

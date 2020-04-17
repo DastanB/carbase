@@ -17,7 +17,7 @@ python manage.py migrate
 
 
 # celery -A diploma beat --loglevel=INFO
-celery -A diploma worker --pool=solo -l info
+# celery -A diploma worker --pool=solo -l info
 
 
 exec "$@"
