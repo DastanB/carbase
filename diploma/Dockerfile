@@ -4,6 +4,8 @@ FROM python:3.7.7-alpine
 # set work directory
 WORKDIR /usr/src/diploma
 
+RUN echo http://repository.fit.cvut.cz/mirrors/alpine/v3.11/main > /etc/apk/repositories; \
+    echo http://repository.fit.cvut.cz/mirrors/alpine/v3.11/community >> /etc/apk/repositories
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -24,10 +26,5 @@ COPY ./entrypoint.sh /usr/src/diploma/entrypoint.sh
 # copy project
 COPY . /usr/src/diploma/
 
-
-# RUN apk add rabbitmq-server \
-#     && rabbitmq-server start
-
 RUN chmod +x ./entrypoint.sh
-# run entrypoint.sh
 ENTRYPOINT ["/usr/src/diploma/entrypoint.sh"]

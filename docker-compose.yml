@@ -3,9 +3,11 @@ version: '3.7'
 services:
   web:
     build: ./diploma
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn diploma.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./diploma/:/usr/src/diploma/
+      - static_volume:/usr/src/diploma/static
+      - media_volume:/usr/src/diploma/media
     ports:
       - 8000:8000
     depends_on:
@@ -52,7 +54,20 @@ services:
     volumes:
       - rabbit:/var/lib/rabbit
       - ./rabbit.conf:/etc/rabbit/rabbitmq.conf
-
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:1337
+    volumes:
+      - static_volume:/static
+      - media_volume:/media
+    depends_on:
+      - db
+      - memcached
+      - rabbit
+      - web
 volumes:
   postgres_data:
   rabbit:
+  static_volume:
+  media_volume:  

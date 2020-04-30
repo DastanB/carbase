@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'celery',
     'corsheaders',
 
+
     'main',
 ]
 
@@ -75,10 +76,6 @@ CACHES = {
 
 # BROKER_URL = 'amqp://dastan:infinitiq50@localhost:5672/myvhost'
 # CELERY_BROKER_URL = 'amqp://localhost'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
 TEMPLATES = [
     {
@@ -154,7 +151,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 
 REST_FRAMEWORK = {
@@ -240,6 +237,10 @@ LOGGING = {
         }
     },
 }
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_FILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
